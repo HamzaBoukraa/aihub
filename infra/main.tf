@@ -23,6 +23,7 @@ locals {
   ca_chat_name            = "${var.ca_chat_name}${local.name_sufix}"
   ca_prep_docs_name       = "${var.ca_prep_docs_name}${local.name_sufix}"
   ca_aihub_name           = "${var.ca_aihub_name}${local.name_sufix}"
+  func_name               = "plugin${local.sufix}"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -228,4 +229,55 @@ module "ca_aihub" {
   managed_identity_client_id     = module.mi.client_id
   enable_entra_id_authentication = var.enable_entra_id_authentication
   image_name                     = var.ca_aihub_image
+}
+
+module "qdrantdb" {
+  source            = "./modules/ca-qdrantdb"
+  location          = azurerm_resource_group.rg.location
+  resource_group_id = azurerm_resource_group.rg.id
+  ca_name           = "ca-qdrantdb"
+  cae_id            = module.cae.cae_id
+}
+
+module "weather" {
+  source              = "./modules/ca-weather"
+  location            = azurerm_resource_group.rg.location
+  resource_group_id   = azurerm_resource_group.rg.id
+  ca_name             = "ca-weather"
+  cae_id              = module.cae.cae_id
+  cae_default_domain  = module.cae.default_domain
+  chat_gpt_deployment = module.openai.gpt_deployment_name
+  chat_gpt_endpoint   = module.openai.openai_endpoint
+  chat_gpt_key        = module.openai.openai_key
+}
+
+module "memory" {
+  source                            = "./modules/ca-memory"
+  location                          = azurerm_resource_group.rg.location
+  resource_group_id                 = azurerm_resource_group.rg.id
+  managed_identity_id               = module.mi.mi_id
+  ca_name                           = "ca-memory"
+  cae_id                            = module.cae.cae_id
+  chat_gpt_endpoint                 = module.openai.openai_endpoint
+  chat_gpt_key                      = module.openai.openai_key
+  chat_gpt_deployment               = module.openai.gpt_deployment_name
+  doc_intelligence_service_endpoint = module.form_recognizer.form_recognizer_endpoint
+  doc_intelligence_service_key      = module.form_recognizer.form_recognizer_key
+  embeddings_deployment             = module.openai.embedding_deployment_name
+  storage_account_name              = module.st.storage_account_name
+  storage_account_id                = module.st.storage_account_id
+}
+
+module "plugin" {
+  source                   = "./modules/ca-plugin"
+  location                 = azurerm_resource_group.rg.location
+  resource_group_name      = azurerm_resource_group.rg.name
+  resource_group_id        = azurerm_resource_group.rg.id
+  func_name                = local.func_name
+  cae_id                   = module.cae.cae_id
+  cae_default_domain       = module.cae.default_domain
+  appi_instrumentation_key = module.appi.appi_key
+  openai_key               = module.openai.openai_key
+  openai_model             = module.openai.gpt_deployment_name
+  openai_endpoint          = module.openai.openai_endpoint
 }

@@ -1,0 +1,13 @@
+variable "resource_group_id" {}
+variable "location" {}
+variable "ca_name" {}
+variable "cae_id" {}
+variable "managed_identity_id" {}
+variable "chat_gpt_deployment" {}
+variable "chat_gpt_endpoint" {}
+variable "chat_gpt_key" {}
+variable "embeddings_deployment" {}
+variable "storage_account_name" {}
+variable "storage_account_id" {}
+variable "doc_intelligence_service_endpoint" {}
+variable "doc_intelligence_service_key" {}

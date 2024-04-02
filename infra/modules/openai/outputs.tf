@@ -6,6 +6,10 @@ output "openai_endpoint" {
   value = azurerm_cognitive_account.openai.endpoint
 }
 
+output "openai_key" {
+  value = azurerm_cognitive_account.openai.primary_access_key
+}
+
 output "gpt_deployment_name" {
   value = azurerm_cognitive_deployment.gpt_35_turbo.name
 }

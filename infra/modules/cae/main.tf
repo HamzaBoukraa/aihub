@@ -23,6 +23,12 @@ resource "azapi_resource" "cae" {
           workloadProfileType = "Consumption"
           name                = "Consumption"
         },
+        {
+          workloadProfileType = "D32"
+          name                = "Vector"
+          minimumCount        = 1
+          maximumCount        = 2
+        },
       ]
     }
   })

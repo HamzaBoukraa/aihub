@@ -43,12 +43,12 @@ output "embedding_deployment_name" {
   description = "The name of the embedding deployment"
 }
 
-output "aihub_fqdn" {
-  value       = module.ca_aihub.fqdn
-  description = "The FQDN of the AI Hub service"
-}
+# output "aihub_fqdn" {
+#   value       = module.ca_aihub.fqdn
+#   description = "The FQDN of the AI Hub service"
+# }
 
-output "chat_fqdn" {
-  value       = module.ca_chat.fqdn
-  description = "The FQDN of the Chat service"
-}
+# output "chat_fqdn" {
+#   value       = module.ca_chat.fqdn
+#   description = "The FQDN of the Chat service"
+# }
